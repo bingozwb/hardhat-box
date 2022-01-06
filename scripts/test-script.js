@@ -1,6 +1,8 @@
 const {ethers} = require('hardhat')
 const hre = require('hardhat')
 
+const { sleep, processNonce, erc20BalanceOf, erc20Approve, nftApprove, toWei, toEther, decodeFunction } = require('./contractUtil')
+
 const property = require('../.env.' + hre.network.name)
 
 // addresses storage
@@ -11,11 +13,15 @@ const MAX_UINT = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff
 
 async function main() {
   console.log('-------------------------------- current network:', hre.network.name, 'id:', await ethers.provider.getNetwork(), '-------------------------------- ')
-  const timestamp = (await ethers.provider.getBlock(await ethers.provider.getBlockNumber())).timestamp
+  blockTag = await ethers.provider.getBlockNumber()
+  timestamp = (await ethers.provider.getBlock(blockTag)).timestamp
   console.log('timestamp', timestamp)
 
   accounts = await ethers.getSigners()
-  from = accounts[0].address
+  connetWallet = accounts[0]
+  // connetWallet = new ethers.Wallet('', ethers.provider)
+  from = connetWallet.address
+  console.log('from', from)
   const balance = await ethers.provider.getBalance(from)
   console.log('balance', ethers.utils.formatEther(balance).toString())
 
@@ -48,34 +54,24 @@ const configTest = async () => {
 
 const otherTest = async () => {
   console.log('other >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-  // const transactionReceipt = await ethers.provider.getTransactionReceipt('0xfde4fd74b4910117fe36726ae73276661c07e555684712499f1d4ff916b09ee8')
-  // console.log('transactionReceipt', transactionReceipt)
-  // const logs = transactionReceipt.logs
-  // // console.log('race.events', race.interface)
-  // const signature = ethers.utils.id('EnterRoom(address,uint256,uint256,uint256,uint256)')
-  // console.log('signature', signature)
-  // for (let log of logs) {
-  //   if (log.topics[0] === signature) {
-  //     console.log('log', log)
-  //   }
-  // }
+
 }
 
 const initContract = async () => {
   console.log('initContract >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
   if (addrObj.erc20TokenAddress) {
-    erc20 = (await ethers.getContractFactory('ERC20Token')).attach(addrObj.erc20TokenAddress)
+    erc20 = (await ethers.getContractFactory('ERC20Token')).attach(addrObj.erc20TokenAddress).connect(connetWallet)
     console.log('erc20', erc20.address)
   }
 
   if (addrObj.configBaseAddress) {
-    configBase = (await ethers.getContractFactory('ConfigBase')).attach(addrObj.configBaseAddress)
+    configBase = (await ethers.getContractFactory('ConfigBase')).attach(addrObj.configBaseAddress).connect(connetWallet)
     console.log('configBase', configBase.address)
   }
 
   if (addrObj.assetsAddress) {
-    assets = (await ethers.getContractFactory('Assets')).attach(addrObj.assetsAddress)
+    assets = (await ethers.getContractFactory('Assets')).attach(addrObj.assetsAddress).connect(connetWallet)
     console.log('assets', assets.address)
   }
 

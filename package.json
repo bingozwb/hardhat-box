@@ -1,6 +1,6 @@
 {
   "name": "hardhat-box",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "[Node.js](https://nodejs.org/en/)",
   "main": "cli.js",
   "directories": {
@@ -12,6 +12,7 @@
   "author": "bingo",
   "license": "ISC",
   "dependencies": {
+    "@openzeppelin/contracts": "^4.4.1",
     "@openzeppelin/contracts-upgradeable": "^4.4.1"
   },
   "devDependencies": {

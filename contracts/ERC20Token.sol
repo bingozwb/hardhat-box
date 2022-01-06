@@ -2,15 +2,14 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC20/ERC20Upgradeable.sol";
+import "@openzeppelin/contracts/token/ERC20/ERC20.sol";
 
 
-contract ERC20Token is ERC20Upgradeable {
+contract ERC20Token is ERC20 {
 
     uint8 _decimals;
 
-    function initialize(string memory name_, string memory symbol_, uint8 decimals_, uint initalSupply_) public initializer {
-        __ERC20_init(name_, symbol_);
+    constructor(string memory name_, string memory symbol_, uint8 decimals_, uint initalSupply_) ERC20(name_, symbol_) {
 
         _decimals = decimals_;
 
