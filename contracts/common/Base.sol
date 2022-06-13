@@ -2,9 +2,7 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/proxy/utils/Initializable.sol";
-
-abstract contract BaseUpgradeable is Initializable {
+abstract contract Base {
     bool public isPaused;
     bool private locked;
     address public admin;
@@ -15,7 +13,7 @@ abstract contract BaseUpgradeable is Initializable {
     event SetAuth(address account, bool authState);
     event SetIsPaused(bool isPaused);
 
-    function __Base_init() internal initializer {
+    constructor() {
         admin = msg.sender;
 
         emit SetAdmin(admin);

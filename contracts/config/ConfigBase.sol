@@ -2,20 +2,16 @@
 
 pragma solidity ^0.8.0;
 
-import "../common/BaseUpgradeable.sol";
+import "../common/Base.sol";
 
 
-contract ConfigBase is BaseUpgradeable {
+contract ConfigBase is Base {
 
     // contract => configName
     mapping(address => bytes) public contractOf;
     // configName => config
     mapping(bytes => address) public configNameOf;
 
-
-    function initialize() public initializer {
-        BaseUpgradeable.__Base_init();
-    }
 
     function setContractOf(address _index, bytes memory _value) external onlyAdmin {
         contractOf[_index] = _value;

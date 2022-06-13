@@ -2,13 +2,13 @@
 
 pragma solidity ^0.8.0;
 
-import "@openzeppelin/contracts-upgradeable/token/ERC721/IERC721Upgradeable.sol";
-import "@openzeppelin/contracts-upgradeable/token/ERC20/utils/SafeERC20Upgradeable.sol";
-import "./BaseUpgradeable.sol";
+import "@openzeppelin/contracts/token/ERC721/IERC721.sol";
+import "@openzeppelin/contracts/token/ERC20/utils/SafeERC20.sol";
+import "./Base.sol";
 
 
-abstract contract AdminBaseUpgradeable is BaseUpgradeable {
-    using SafeERC20Upgradeable for IERC20Upgradeable;
+abstract contract AdminBase is Base {
+    using SafeERC20 for IERC20;
 
 
     ///////////////////////////////// admin function /////////////////////////////////
@@ -20,7 +20,7 @@ abstract contract AdminBaseUpgradeable is BaseUpgradeable {
      * @dev adminWithdrawNFT
      */
     function adminWithdrawNFT(address _token, address _to, uint _tokenId) external onlyAdmin returns (bool) {
-        IERC721Upgradeable(_token).safeTransferFrom(address(this), _to, _tokenId);
+        IERC721(_token).safeTransferFrom(address(this), _to, _tokenId);
 
         emit AdminWithdrawNFT(msg.sender, _token, _to, _tokenId);
         return true;
@@ -30,7 +30,7 @@ abstract contract AdminBaseUpgradeable is BaseUpgradeable {
      * @dev adminWithdrawToken
      */
     function adminWithdrawToken(address _token, address _to, uint _amount) external onlyAdmin returns (bool) {
-        IERC20Upgradeable(_token).safeTransfer(_to, _amount);
+        IERC20(_token).safeTransfer(_to, _amount);
 
         emit AdminWithdrawToken(msg.sender, _token, _to, _amount);
         return true;
