@@ -5,7 +5,7 @@ const path = require('path')
 
 CONTRACT_PATH = './contracts'
 BUILD_PATH = '../artifacts/contracts/'
-IGNORE_CONTRACT = ['BlindBox.sol', 'FishBox.sol']
+IGNORE_CONTRACT = ['Ignore.sol',]
 
 function genSign () {
   fs.readdirSync(CONTRACT_PATH).forEach(function (name) {
@@ -22,7 +22,7 @@ function genSign () {
         logFunctionSignature(contractFactory.interface)
 
         console.log(`[${name}]` + ' event signature >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
-        logEventSignature(contractFactory.interface.events)
+        logEventSignature(contractFactory.interface)
       }
     }
   })
@@ -39,10 +39,11 @@ const logFunctionSignature = function (_abi, view) {
 }
 
 const logEventSignature = function (_abi) {
-  for (const key in _abi) {
-    const item = _abi[key]
+  const events = _abi.events
+  for (const key in events) {
+    const item = events[key]
     if (item.type !== 'event') continue
-    console.log(item.name + ':', ethers.utils.id(key))
+    console.log(item.name + ':', _abi.getEventTopic(key))
   }
 }
 
