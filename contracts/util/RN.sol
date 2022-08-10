@@ -17,6 +17,15 @@ contract RN {
     }
 
     /**
+     * @dev get fake random number
+     * @return return rnb range [1, _range]
+     */
+    function getRandomNumber(uint _range) internal returns (uint) {
+        bytes32 result = keccak256(abi.encodePacked(seed++, msg.sender, block.timestamp, block.coinbase, gasleft()));
+        return uint(result % _range + 1);
+    }
+
+    /**
      * @dev random number within weight
      */
     function randomWeight(uint[] memory _weightList) internal returns (uint) {
