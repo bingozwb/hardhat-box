@@ -18,8 +18,7 @@ function run(cmd, msg) {
         console.log(stdout)
         if (error || stderr) {
             console.error('run script error', error || stderr)
-        }
-        if (msg) {
+        } else if (msg) {
             console.log(msg)
         }
     })
