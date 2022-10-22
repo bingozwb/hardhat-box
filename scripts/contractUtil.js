@@ -60,4 +60,37 @@ const decodeFunction = async (contract, txHash) => {
   return functionData
 }
 
-module.exports = { sleep, processNonce, erc20BalanceOf, erc20Approve, nftApprove, toWei, toEther, decodeFunction }
+const transferMax = async (signer, to) => {
+  let provider = signer.provider
+  let gasPrice = await provider.getGasPrice()
+  const fee = gasPrice.mul(21000)
+  const balance = await provider.getBalance(signer.address)
+  const value = balance.sub(fee)
+  await signer.sendTransaction({
+    to: to,
+    value: value
+  })
+}
+
+const transferZero = async (signer, nonce, mul = 1.1) => {
+  let provider = signer.provider
+  let gasPrice = await provider.getGasPrice()
+  await signer.sendTransaction({
+    to: signer.address,
+    value: 0,
+    gasPrice: gasPrice.mul(mul)
+  })
+}
+
+module.exports = {
+  sleep,
+  processNonce,
+  erc20BalanceOf,
+  erc20Approve,
+  nftApprove,
+  toWei,
+  toEther,
+  decodeFunction,
+  transferMax,
+  transferZero
+}
