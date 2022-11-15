@@ -9,11 +9,11 @@ contract ERC20Token is ERC20 {
 
     uint8 _decimals;
 
-    constructor(string memory name_, string memory symbol_, uint8 decimals_, uint initalSupply_) ERC20(name_, symbol_) {
+    constructor(string memory name_, string memory symbol_, uint8 decimals_, uint initialSupply_) ERC20(name_, symbol_) {
 
         _decimals = decimals_;
 
-        _mint(msg.sender, initalSupply_ * 10 ** decimals());
+        _mint(msg.sender, initialSupply_ * 10 ** decimals());
     }
 
     function decimals() public view override returns (uint8) {
