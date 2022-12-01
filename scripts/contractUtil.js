@@ -18,16 +18,16 @@ const erc20BalanceOf = async (contract, from) => {
   return balance
 }
 
-const erc20Approve = async (contract, from, spender) => {
-  const allowance = await contract.allowance(from, spender)
+const erc20Approve = async (contract, spender) => {
+  const allowance = await contract.allowance(contract.signer.address, spender)
   console.debug('allowance', toEther(allowance))
   if (0 >= allowance) {
     await contract.approve(spender, MAX_UINT)
   }
 }
 
-const nftApprove = async (contract, from, spender) => {
-  const isApprovedForAll = await contract.isApprovedForAll(from, spender)
+const nftApprove = async (contract, spender) => {
+  const isApprovedForAll = await contract.isApprovedForAll(contract.signer.address, spender)
   console.debug('isApprovedForAll', isApprovedForAll)
   if (!isApprovedForAll) {
     await contract.setApprovalForAll(spender, true)
