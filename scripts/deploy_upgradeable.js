@@ -1,4 +1,4 @@
-const {ethers} = require('hardhat')
+const { ethers } = require('hardhat')
 
 const cd = require('./contract_deployment')
 
@@ -11,23 +11,36 @@ let addresses = JSON.parse(JSON.stringify(property.addr))
  * deploy contract
  */
 const deployContract = async () => {
-    try {
-        addresses.configBaseAddress = await cd.deployConfigBase(addresses)
+  try {
+    addresses.configBaseAddress = await cd.deployUpgradeable(addresses, 'ConfigBase')
+    addresses.assetsAddress = await cd.deployUpgradeable(addresses, 'AssetsServer', true)
+    addresses.erc20TokenAddress = await cd.deploy(addresses, 'ERC20Token', ['ERC20Token', 'ERC20', 18, 8_000_000_000])
 
-        await cd.set(addresses)
-    } catch (e) {
-        console.error(e)
-    } finally {
-        await cd.print(addresses)
-    }
+    await cd.deployConf(addresses, 'XConf')
+
+    await cd.set(addresses)
+
+    await setContract()
+  } catch (e) {
+    console.error(e)
+  } finally {
+    await cd.print(addresses)
+  }
+}
+
+const setContract = async () => {
+  console.log('setContract >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+
+  const configBase = await cd.initContract('ConfigBase', addresses.configBaseAddress)
+
 }
 
 async function main() {
-    if (!process.env.deploy) {
-        await deployContract()
-    } else {
-        await cd[process.env.deploy](addresses)
-    }
+  if (!process.env.deploy) {
+    await deployContract()
+  } else {
+    await cd[process.env.deploy](addresses)
+  }
 }
 
 // We recommend this pattern to be able to use async/await everywhere
@@ -35,6 +48,6 @@ async function main() {
 main()
   .then(() => process.exit(0))
   .catch(error => {
-      console.error(error)
-      process.exit(1)
+    console.error(error)
+    process.exit(1)
   })
