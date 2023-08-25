@@ -16,13 +16,18 @@ function genSign () {
         name = name.split('.')[0]
         filePath = BUILD_PATH + name + '.sol/' + name + '.json'
 
-        const contractFactory = ethers.ContractFactory.fromSolidity(require(filePath))
+        try {
+          let contractJson = require(filePath)
+          const contractFactory = ethers.ContractFactory.fromSolidity(contractJson)
 
-        console.log(`[${name}]` + ' function signature >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
-        logFunctionSignature(contractFactory.interface)
+          console.log(`[${name}]` + ' function signature >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+          logFunctionSignature(contractFactory.interface)
 
-        console.log(`[${name}]` + ' event signature >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
-        logEventSignature(contractFactory.interface)
+          console.log(`[${name}]` + ' event signature >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>> ')
+          logEventSignature(contractFactory.interface)
+        } catch (e) {
+          console.error('json not exist', filePath)
+        }
       }
     }
   })
