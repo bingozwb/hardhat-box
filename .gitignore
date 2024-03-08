@@ -25,7 +25,6 @@
 ### nodejs ###
 /node_modules/
 /dist/
-package-lock.json
 
 ### solidity ###
 /build/
