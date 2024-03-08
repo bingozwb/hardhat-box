@@ -58,35 +58,53 @@ module.exports = {
     },
     bsct: {
       url: 'https://data-seed-prebsc-1-s1.binance.org:8545/',
-      accounts: [],
+      accounts: {
+        mnemonic: '',
+        initialIndex: 0
+      },
       gas: 'auto',
       // gas: 30000000,
     },
     bsc: { // https://docs.binance.org/smart-chain/wallet/metamask.html
       url: 'https://bsc-dataseed.binance.org/',
-      accounts: [],
+      accounts: {
+        mnemonic: '',
+        initialIndex: 0
+      },
       gas: 'auto',
     },
     okt: {
       url: 'https://exchaintestrpc.okex.org',
-      accounts: [],
+      accounts: {
+        mnemonic: '',
+        initialIndex: 0
+      },
       gas: 'auto',
       // gas: 30000000,
     },
     oec: { // https://okexchain-docs.readthedocs.io/en/latest/developers/quick-start-for-mainnet.html
       url: 'https://exchainrpc.okex.org',
-      accounts: [],
+      accounts: {
+        mnemonic: '',
+        initialIndex: 0
+      },
       gas: 'auto',
     },
     hecot: {
       url: 'https://http-testnet.hecochain.com',
-      accounts: [],
+      accounts: {
+        mnemonic: '',
+        initialIndex: 0
+      },
       gas: 'auto',
       // gas: 30000000,
     },
     heco: { // https://docs.hecochain.com/#/wallet
       url: 'https://http-mainnet.hecochain.com',
-      accounts: [],
+      accounts: {
+        mnemonic: '',
+        initialIndex: 0
+      },
       gas: 'auto',
     },
     goerli: {

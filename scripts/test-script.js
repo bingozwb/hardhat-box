@@ -4,9 +4,10 @@ const hre = require('hardhat')
 const { sleep, processNonce, erc20BalanceOf, erc20Approve, nftApprove, toWei, toEther, decodeFunction } = require('./contractUtil')
 
 const property = require('../.env.' + hre.network.name)
+const cd = require('./contract_deployment')
 
-// addresses storage
-let addrObj = JSON.parse(JSON.stringify(property.addr))
+//  storage
+let addresses = JSON.parse(JSON.stringify(property.addr))
 
 // constant
 const MAX_UINT = '0xffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff'
@@ -49,7 +50,7 @@ const configTest = async () => {
   // console.log(await configBase.getUint(ethers.utils.toUtf8Bytes('FishConf'), ethers.utils.toUtf8Bytes('fish_max'), 265001))
   // console.log(await configBase.getUintArray(ethers.utils.toUtf8Bytes('AdminBoxConf'), ethers.utils.toUtf8Bytes('value_ps'), 273003))
   // console.log(await configBase.getUintArray2(ethers.utils.toUtf8Bytes('AssetsConf'), ethers.utils.toUtf8Bytes('power'), 1))
-  // console.log(await configBase.get(addrObj.adminBoxConfAddress, ethers.utils.toUtf8Bytes('value_ps'), 273003))
+  // console.log(await configBase.get(addresses.adminBoxConfAddress, ethers.utils.toUtf8Bytes('value_ps'), 273003))
 }
 
 const otherTest = async () => {
@@ -60,18 +61,18 @@ const otherTest = async () => {
 const initContract = async () => {
   console.log('initContract >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 
-  if (addrObj.erc20TokenAddress) {
-    erc20 = (await ethers.getContractFactory('ERC20Token')).attach(addrObj.erc20TokenAddress).connect(connetWallet)
+  if (addresses.erc20TokenAddress) {
+    erc20 = (await ethers.getContractFactory('ERC20Token')).attach(addresses.erc20TokenAddress).connect(connetWallet)
     console.log('erc20', erc20.address)
   }
 
-  if (addrObj.configBaseAddress) {
-    configBase = (await ethers.getContractFactory('ConfigBase')).attach(addrObj.configBaseAddress).connect(connetWallet)
+  if (addresses.configBaseAddress) {
+    configBase = (await ethers.getContractFactory('ConfigBase')).attach(addresses.configBaseAddress).connect(connetWallet)
     console.log('configBase', configBase.address)
   }
 
-  if (addrObj.assetsAddress) {
-    assets = (await ethers.getContractFactory('Assets')).attach(addrObj.assetsAddress).connect(connetWallet)
+  if (addresses.assetsAddress) {
+    assets = (await ethers.getContractFactory('Assets')).attach(addresses.assetsAddress).connect(connetWallet)
     console.log('assets', assets.address)
   }
 
