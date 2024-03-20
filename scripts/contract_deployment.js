@@ -21,17 +21,12 @@ module.exports.deploy = async (addresses, contractName, args = []) => {
   return contract.address
 }
 
-module.exports.deployUpgradeable = async (addresses, contractName, setConfig = false, args = [], opts = {}) => {
+module.exports.deployUpgradeable = async (addresses, contractName, args = [], opts = {}) => {
   console.log('deployUpgradeable >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>', contractName)
   const contractFactory = await ethers.getContractFactory(contractName)
   const contract = await upgrades.deployProxy(contractFactory, args, opts)
   await contract.deployed()
   console.log('contractAddress:', contract.address)
-
-  if (setConfig) {
-    console.log('setConfig -------------------------------- ')
-    await contract.setConfig(addresses.configBaseAddress)
-  }
 
   return contract.address
 }
@@ -94,6 +89,22 @@ module.exports.set = async (addresses) => {
   }
 
   await ca('Assets', addresses.assetsAddress)
+
+  console.log('setConfig >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+
+  const setConfig = async (contractName, contractAddress, configAddress) => {
+    if (!contractAddress) {return}
+    const contract = (await ethers.getContractFactory(contractName)).attach(contractAddress)
+    const config = await contract.config()
+    console.log(contractName, config)
+    if (configAddress && !config) {
+      console.log('setConfig -------------------------------- ', contractName, configAddress)
+      await contract.setConfig(configAddress)
+    }
+  }
+
+  await setConfig('AssetsServer', addresses.assetsAddress,
+    addresses.configBaseAddress)
 
   console.log('setAuth >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
 

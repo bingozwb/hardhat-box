@@ -13,7 +13,7 @@ let addresses = JSON.parse(JSON.stringify(property.addr))
 const deployContract = async () => {
   try {
     addresses.configBaseAddress = await cd.deployUpgradeable(addresses, 'ConfigBase')
-    addresses.assetsAddress = await cd.deployUpgradeable(addresses, 'AssetsServer', true)
+    addresses.assetsAddress = await cd.deployUpgradeable(addresses, 'AssetsServer')
     addresses.erc20TokenAddress = await cd.deploy(addresses, 'ERC20Token', ['ERC20Token', 'ERC20', 18, 8_000_000_000])
 
     await cd.deployConf(addresses, 'XConf')
