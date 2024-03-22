@@ -29,9 +29,19 @@ async function main() {
   acc = from
 
   await initContract()
+  // await xxxTest()
   // await erc20Test()
   // await configTest()
-  // await otherTest()
+}
+
+const xxxTest = async () => {
+  console.log('xxx >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
+  const xxx = await cd.initContract('xxx', addresses.xxxAddress)
+
+  ///////////////////////////////// call /////////////////////////////////
+
+  ///////////////////////////////// sendTx /////////////////////////////////
+
 }
 
 const erc20Test = async () => {
@@ -51,11 +61,6 @@ const configTest = async () => {
   // console.log(await configBase.getUintArray(ethers.utils.toUtf8Bytes('AdminBoxConf'), ethers.utils.toUtf8Bytes('value_ps'), 273003))
   // console.log(await configBase.getUintArray2(ethers.utils.toUtf8Bytes('AssetsConf'), ethers.utils.toUtf8Bytes('power'), 1))
   // console.log(await configBase.get(addresses.adminBoxConfAddress, ethers.utils.toUtf8Bytes('value_ps'), 273003))
-}
-
-const otherTest = async () => {
-  console.log('other >>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>')
-
 }
 
 const initContract = async () => {
