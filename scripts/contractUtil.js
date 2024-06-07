@@ -34,6 +34,14 @@ const nftApprove = async (contract, spender) => {
   }
 }
 
+const auth = async (contract, from) => {
+  const auth_from = await contract.auth(from)
+  console.log(`auth [${from}]: ${auth_from}`)
+  if (!auth_from) {
+    await contract.setAuth(from, true)
+  }
+}
+
 const sleep = (ms) => {
   return new Promise(resolve => setTimeout(resolve, ms))
 }
@@ -83,6 +91,7 @@ const transferZero = async (signer, nonce, mul = 1.1) => {
 }
 
 module.exports = {
+  auth,
   sleep,
   processNonce,
   erc20BalanceOf,
