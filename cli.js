@@ -41,6 +41,45 @@ function deploy() {
     })
 }
 
+function flatten() {
+    if (argv.length < 3 || argv.length > 5) {
+        help()
+        return
+    }
+    const outputPath = argv[4] || 'flatten'
+    // make dir
+    fs.mkdir(outputPath, {
+        recursive: true
+    }, err => {
+        if (err) console.error('create output dir error', err)
+    })
+    if (argv.length === 4) { // flatten one
+        const contractName = argv[3]
+        let command = `npx hardhat flatten contracts/${contractName}.sol > ${outputPath}/${contractName}_flatten.sol`
+        exec(command, function (error, stdout, stderr) {
+            console.log(stdout)
+            if (error || stderr) {
+                console.error('Error flatten:', error || stderr)
+            }
+        })
+    } else if (argv.length === 3) { // flatten all
+        const contractPath = 'contracts'
+        fs.readdirSync(contractPath).forEach((name) => {
+            let filePath = path.join(contractPath, name)
+            if (name.split('.')[1] === 'sol') {
+                const contractName = name.split('.')[0]
+                let command = `npx hardhat flatten contracts/${contractName}.sol > ${outputPath}/${contractName}_flatten.sol`
+                exec(command, function (error, stdout, stderr) {
+                    console.log(stdout)
+                    if (error || stderr) {
+                        console.error('Error flatten:', error || stderr)
+                    }
+                })
+            }
+        })
+    }
+}
+
 CONTRACT_PATH = './artifacts/contracts'
 OUTPUT_PATH = './abi/'
 
@@ -67,40 +106,48 @@ function genABI() {
     fs.writeFileSync(outputPath + 'abi.json', data)
 }
 
+function help()  {
+    let str = '' +
+      'cli version 1.0.1\n' +
+      '\n' +
+      'Usage: node cli.js cmd [option]\n' +
+      '\n' +
+      'Options:\n' +
+      '\n' +
+      '  -h, --help            Shows this message.\n' +
+      '  -n, --network         The network to connect to.\n' +
+      '\n' +
+      'Commands:\n' +
+      '\n' +
+      '  c            Compiles the entire project, building all artifacts\n' +
+      '  call         Clears the cache and deletes all artifacts & Compiles\n' +
+      '  run          Run script with hardhat(without compile)\n' +
+      '  crun         Run script with hardhat\n' +
+      '  d            Deploy contract with deploy_script\n' +
+      '  abi          Extract abi in contracts\n'
+    console.log(str)
+}
+
 function main() {
     if (cmd === 'c') { // compile
         run('npx hardhat compile', 'compile succeed')
     } else if (cmd === 'call') { // compile all
         run('npx hardhat clean', 'clean succeed')
         run('npx hardhat compile', 'compile succeed')
-    } else if (cmd === 'run') { // run script
+    } else if (cmd === 'run') { // run script without compile
         run('npx hardhat run --no-compile --network ' + process.env.network + ' ' + argv[3])
     } else if (cmd === 'crun') { // run script
         run('npx hardhat run --network ' + process.env.network + ' ' + argv[3])
+    } else if (cmd === 'v') { // verify contract onto etherscan
+        run('npx hardhat verify --network ' + process.env.network + ' ' + argv[3])
     } else if (cmd === 'd') { // deploy
         deploy()
+    } else if (cmd === 'f') { // flatten sol
+        flatten()
     } else if (cmd === 'abi') { // abi
         genABI()
     } else {
-        let str = '' +
-            'cli version 1.0.1\n' +
-            '\n' +
-            'Usage: node cli.js cmd [option]\n' +
-            '\n' +
-            'Options:\n' +
-            '\n' +
-            '  -h, --help            Shows this message.\n' +
-            '  -n, --network         The network to connect to.\n' +
-            '\n' +
-            'Commands:\n' +
-            '\n' +
-            '  c            Compiles the entire project, building all artifacts\n' +
-            '  call         Clears the cache and deletes all artifacts & Compiles\n' +
-            '  run          Run script with hardhat(without compile)\n' +
-            '  crun         Run script with hardhat\n' +
-            '  d            Deploy contract with deploy_script\n' +
-            '  abi          Extract abi in contracts\n'
-        console.log(str)
+        help()
     }
 }
 
